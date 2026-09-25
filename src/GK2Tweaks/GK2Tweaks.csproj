@@ -22,9 +22,12 @@
     <GameDataDir Condition="'$(GameDataDir)' == ''">$(GameDir)\GraveyardKeeper2_Data</GameDataDir>
     <BepInExDir Condition="'$(BepInExDir)' == ''">$(GameDir)\BepInEx</BepInExDir>
     <FrameworkDll Condition="'$(FrameworkDll)' == ''">$(BepInExDir)\plugins\GK2.Framework.dll</FrameworkDll>
+    <GameExecutable Condition="'$(GameExecutable)' == ''">$(GameDir)\GraveyardKeeper2.exe</GameExecutable>
 
     <DeployToGame Condition="'$(DeployToGame)' == '' and '$(Configuration)' == 'Debug' and '$(HasLocalProps)' == 'true'">true</DeployToGame>
     <DeployToGame Condition="'$(DeployToGame)' == ''">false</DeployToGame>
+    <RunGameAfterDeploy Condition="'$(RunGameAfterDeploy)' == '' and '$(DeployToGame)' == 'true' and '$(Configuration)' == 'Debug'">true</RunGameAfterDeploy>
+    <RunGameAfterDeploy Condition="'$(RunGameAfterDeploy)' == ''">false</RunGameAfterDeploy>
     <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(BepInExDir)\plugins\GK2Tweaks</ModDeployDir>
   </PropertyGroup>
 
@@ -57,7 +60,7 @@
 
   <Target Name="ValidateLocalSdk" BeforeTargets="ResolveReferences">
     <Message Importance="high"
-             Text="GK2Tweaks local build: Configuration=$(Configuration), GameDir=$(GameDir), DeployToGame=$(DeployToGame)" />
+             Text="GK2Tweaks local build: Configuration=$(Configuration), GameDir=$(GameDir), DeployToGame=$(DeployToGame), RunGameAfterDeploy=$(RunGameAfterDeploy)" />
     <Error
         Condition="!Exists('$(BepInExDir)\core\BepInEx.dll')"
         Text="BepInEx.dll was not found. Copy build\Local.props.example to build\Local.props and set GameDir to your Graveyard Keeper 2 installation." />
@@ -70,6 +73,9 @@
     <Error
         Condition="!Exists('$(GameDataDir)\Managed\UnityEngine.dll')"
         Text="UnityEngine.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
+    <Error
+        Condition="'$(DeployToGame)' == 'true' and '$(RunGameAfterDeploy)' == 'true' and !Exists('$(GameExecutable)')"
+        Text="Game executable was not found at '$(GameExecutable)'. Check GameDir or override GameExecutable in build\Local.props." />
   </Target>
 
   <Target Name="DeployBuiltMod"
@@ -81,6 +87,12 @@
           SkipUnchangedFiles="false" />
     <Message Importance="high"
              Text="GK2Tweaks deployed: $(TargetPath) -> $(ModDeployDir)\$(TargetFileName)" />
+    <Message Condition="'$(RunGameAfterDeploy)' == 'true'"
+             Importance="high"
+             Text="GK2Tweaks launching: $(GameExecutable)" />
+    <Exec Condition="'$(RunGameAfterDeploy)' == 'true'"
+          WorkingDirectory="$(GameDir)"
+          Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command &quot;$processName = [System.IO.Path]::GetFileNameWithoutExtension('$(GameExecutable)'); if (-not (Get-Process -Name $processName -ErrorAction SilentlyContinue)) { Start-Process -FilePath '$(GameExecutable)' -WorkingDirectory '$(GameDir)' }&quot;" />
   </Target>
 
 </Project>

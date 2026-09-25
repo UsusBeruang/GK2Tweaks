@@ -43,7 +43,7 @@ Release build:
 dotnet build .\GK2Tweaks.sln -c Release
 ```
 
-The project validates the local BepInEx, GK2 Mod Framework, and Unity reference paths before compiling. During Debug builds it also prints the resolved `GameDir` and deployment state so Rider build output shows exactly where the mod is going.
+The project validates the local BepInEx, GK2 Mod Framework, game assembly, Unity references, and game executable before compiling. During Debug builds it prints the resolved `GameDir`, deployment state, and launch state. A successful local Debug build deploys the DLL first, then starts `GraveyardKeeper2.exe` unless the game is already running.
 
 ## Development workflow
 
