@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GK2.Framework;
 using GK2Tweaks.Compatibility;
+using GK2Tweaks.Features.PlayerMovement;
 using GK2Tweaks.Features.Safety;
 using GK2Tweaks.Features.SaveAnywhere;
 
@@ -29,6 +30,7 @@ namespace GK2Tweaks
 
         private Gk2ModLogger _log;
         private SaveAnywhereFeature _saveAnywhere;
+        private PlayerMovementTweak _playerMovement;
         private UnstuckFeature _unstuck;
         private bool _runtimeEnabled;
 
@@ -42,12 +44,16 @@ namespace GK2Tweaks
             _log = context.Log;
 
             FeatureContractVerifier.VerifySaveAnywhere();
+            FeatureContractVerifier.VerifyPlayerMovementTweak();
             FeatureContractVerifier.VerifyUnstuck();
             context.ConfirmCurrentBuildCompatibility(
-                "Manual save and Unstuck contracts are intact.");
+                "Manual save, Player Movement Tweak, and Unstuck contracts are intact.");
 
             _saveAnywhere = new SaveAnywhereFeature(_log);
             _saveAnywhere.RegisterSettings(context.Settings);
+
+            _playerMovement = new PlayerMovementTweak();
+            _playerMovement.RegisterSettings(context.Settings);
 
             _unstuck = new UnstuckFeature();
             _unstuck.RegisterSettings(context.Settings);
@@ -73,6 +79,7 @@ namespace GK2Tweaks
 
         public override void OnReturnedToMainMenu()
         {
+            _playerMovement?.ResetSession();
         }
 
         internal void Tick()
@@ -81,6 +88,7 @@ namespace GK2Tweaks
                 return;
 
             _saveAnywhere?.Tick();
+            _playerMovement?.Tick();
             _unstuck?.Tick();
         }
     }
