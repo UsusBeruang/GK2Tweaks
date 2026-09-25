@@ -101,13 +101,46 @@ namespace GK2Tweaks.Features.PlayerMovement
             if (!_toggleSprint.Value)
             {
                 _sprintLatched = false;
-                return shortcut.IsPressed();
+                return IsShortcutPressed(shortcut);
             }
 
-            if (shortcut.IsDown())
+            if (IsShortcutDown(shortcut))
                 _sprintLatched = !_sprintLatched;
 
             return _sprintLatched;
+        }
+
+        private static bool IsShortcutPressed(KeyboardShortcut shortcut)
+        {
+            return IsShortcutActive(shortcut, keyDown: false);
+        }
+
+        private static bool IsShortcutDown(KeyboardShortcut shortcut)
+        {
+            return IsShortcutActive(shortcut, keyDown: true);
+        }
+
+        private static bool IsShortcutActive(
+            KeyboardShortcut shortcut,
+            bool keyDown)
+        {
+            KeyCode mainKey = shortcut.MainKey;
+            if (mainKey == KeyCode.None)
+                return false;
+
+            bool mainKeyActive =
+                keyDown ? Input.GetKeyDown(mainKey) : Input.GetKey(mainKey);
+
+            if (!mainKeyActive)
+                return false;
+
+            foreach (KeyCode modifier in shortcut.Modifiers)
+            {
+                if (!Input.GetKey(modifier))
+                    return false;
+            }
+
+            return true;
         }
 
         private void TrackPlayer(PlayerController player)
