@@ -99,14 +99,14 @@ namespace GK2Tweaks.Compatibility
             Type owner,
             string name)
         {
-            MethodInfo method = owner.GetMethod(
-                name,
-                InstanceMembers | StaticMembers);
+            foreach (MethodInfo method in owner.GetMethods(
+                         InstanceMembers | StaticMembers))
+            {
+                if (method.Name == name)
+                    return method;
+            }
 
-            if (method == null)
-                throw new MissingMethodException(owner.FullName, name);
-
-            return method;
+            throw new MissingMethodException(owner.FullName, name);
         }
 
         public static void RequireEvent(
