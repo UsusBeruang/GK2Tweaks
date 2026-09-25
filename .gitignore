@@ -1,0 +1,29 @@
+﻿# Build
+**/bin/
+**/obj/
+artifacts/
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# Visual Studio / user-specific
+.vs/
+*.user
+*.suo
+
+# Local machine configuration
+build/Local.props
+
+# Game / mod binaries
+*.dll
+*.pdb
+
+# Game files
+Game/
+Managed/
+BepInEx/
+
+# OS
+Thumbs.db
+.DS_Store
