@@ -65,23 +65,60 @@ namespace GK2Tweaks.Compatibility
             }
         }
 
+        public static FieldInfo RequireField(
+            Type owner,
+            string name,
+            bool isStatic)
+        {
+            BindingFlags flags = isStatic ? StaticMembers : InstanceMembers;
+            FieldInfo field = owner.GetField(name, flags);
+
+            if (field == null || field.IsStatic != isStatic)
+                throw new MissingFieldException(owner.FullName, name);
+
+            return field;
+        }
+
         public static void RequireField(
             Type owner,
             string name,
             Type valueType,
             bool isStatic)
         {
-            BindingFlags flags = isStatic ? StaticMembers : InstanceMembers;
-            FieldInfo field = owner.GetField(name, flags);
+            FieldInfo field = RequireField(owner, name, isStatic);
 
-            if (field == null
-                || field.FieldType != valueType
-                || field.IsStatic != isStatic)
+            if (field.FieldType != valueType)
             {
                 throw new MissingFieldException(
                     owner.FullName,
                     $"{name} : {valueType.FullName}");
             }
+        }
+
+        public static MethodInfo RequireMethodNamed(
+            Type owner,
+            string name)
+        {
+            MethodInfo method = owner.GetMethod(
+                name,
+                InstanceMembers | StaticMembers);
+
+            if (method == null)
+                throw new MissingMethodException(owner.FullName, name);
+
+            return method;
+        }
+
+        public static void RequireEvent(
+            Type owner,
+            string name)
+        {
+            EventInfo eventInfo = owner.GetEvent(
+                name,
+                InstanceMembers | StaticMembers);
+
+            if (eventInfo == null)
+                throw new MissingMemberException(owner.FullName, name);
         }
 
         public static void RequireMethod(
