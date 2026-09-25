@@ -55,15 +55,18 @@ Gameplay features are developed independently:
 4. Build and runtime-test the PR.
 5. Merge only after the feature passes in-game testing.
 
-Planned feature areas:
+Feature naming uses **Tweak** rather than carrying forward third-party "Better..." branding. Planned feature areas:
 
-- Auto Crafting
-- Containers
-- Item Stacks
-- Player Inventory
-- Big Item Stacking
-- Player Movement
+- Auto Crafting Tweak
+- Container Tweak
+- Item Stack Tweak
+- Player Inventory Tweak
+- Big Item Stacking Tweak
+- Player Movement Tweak
 - Save Anywhere
+- Unstuck
+
+Code types and feature PRs should follow the same naming convention where practical, for example `PlayerMovementTweak` and `ItemStackTweak`.
 
 Shared infrastructure changes use separate `chore/` branches and pull requests.
 
