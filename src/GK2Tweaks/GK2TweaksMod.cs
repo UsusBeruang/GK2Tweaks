@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GK2.Framework;
 using GK2Tweaks.Compatibility;
+using GK2Tweaks.Features.Safety;
 using GK2Tweaks.Features.SaveAnywhere;
 
 namespace GK2Tweaks
@@ -28,6 +29,7 @@ namespace GK2Tweaks
 
         private Gk2ModLogger _log;
         private SaveAnywhereFeature _saveAnywhere;
+        private EmergencyRecoveryFeature _emergencyRecovery;
         private bool _runtimeEnabled;
 
         public override Gk2ModMetadata Metadata => _metadata;
@@ -39,12 +41,16 @@ namespace GK2Tweaks
         {
             _log = context.Log;
 
-            SaveAnywhereCompatibility.Validate();
+            FeatureContractVerifier.VerifySaveAnywhere();
+            FeatureContractVerifier.VerifyEmergencyRecovery();
             context.ConfirmCurrentBuildCompatibility(
-                "Save Anywhere save/teleport API contract is intact.");
+                "Manual save and emergency recovery contracts are intact.");
 
             _saveAnywhere = new SaveAnywhereFeature(_log);
             _saveAnywhere.RegisterSettings(context.Settings);
+
+            _emergencyRecovery = new EmergencyRecoveryFeature();
+            _emergencyRecovery.RegisterSettings(context.Settings);
 
             _log.Info("GK2_TWEAKS_REGISTERED");
         }
@@ -75,6 +81,7 @@ namespace GK2Tweaks
                 return;
 
             _saveAnywhere?.Tick();
+            _emergencyRecovery?.Tick();
         }
     }
 }
