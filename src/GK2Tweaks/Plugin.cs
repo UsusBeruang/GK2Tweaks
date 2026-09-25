@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using GK2.Framework;
 
 namespace GK2Tweaks
@@ -13,9 +13,17 @@ namespace GK2Tweaks
         public const string PluginName = "GK2 Tweaks";
         public const string PluginVersion = "0.1.0";
 
+        private GK2TweaksMod _mod;
+
         private void Awake()
         {
-            FrameworkApi.RegisterMod(new GK2TweaksMod(), Config);
+            _mod = new GK2TweaksMod();
+            FrameworkApi.RegisterMod(_mod, Config);
+        }
+
+        private void Update()
+        {
+            _mod?.Tick();
         }
     }
 }
