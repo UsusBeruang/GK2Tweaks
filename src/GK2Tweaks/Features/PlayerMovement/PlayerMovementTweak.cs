@@ -32,7 +32,7 @@ namespace GK2Tweaks.Features.PlayerMovement
             _walkMultiplier = settings.AddFloatSlider(
                 "Player Movement Tweak",
                 "WalkSpeedMultiplier",
-                1.5f,
+                1.0f,
                 1f,
                 5f,
                 "Walk speed multiplier",
@@ -43,9 +43,9 @@ namespace GK2Tweaks.Features.PlayerMovement
             _sprintMultiplier = settings.AddFloatSlider(
                 "Player Movement Tweak",
                 "SprintSpeedMultiplier",
-                3f,
+                1.5f,
                 1f,
-                10f,
+                5f,
                 "Sprint speed multiplier",
                 "Movement speed multiplier while sprinting.",
                 step: 0.1f,
