@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GK2.Framework;
 using GK2Tweaks.Compatibility;
+using GK2Tweaks.Features.InventoryStorage;
 using GK2Tweaks.Features.PlayerMovement;
 using GK2Tweaks.Features.Safety;
 using GK2Tweaks.Features.SaveAnywhere;
@@ -30,6 +31,7 @@ namespace GK2Tweaks
 
         private Gk2ModLogger _log;
         private SaveAnywhereFeature _saveAnywhere;
+        private InventoryStorageTweak _inventoryStorage;
         private PlayerMovementTweak _playerMovement;
         private UnstuckFeature _unstuck;
         private bool _runtimeEnabled;
@@ -44,13 +46,17 @@ namespace GK2Tweaks
             _log = context.Log;
 
             FeatureContractVerifier.VerifySaveAnywhere();
+            FeatureContractVerifier.VerifyInventoryStorageTweak();
             FeatureContractVerifier.VerifyPlayerMovementTweak();
             FeatureContractVerifier.VerifyUnstuck();
             context.ConfirmCurrentBuildCompatibility(
-                "Manual save, Player Movement Tweak, and Unstuck contracts are intact.");
+                "Inventory & Storage, Manual Save, Player Movement, and Unstuck contracts are intact.");
 
             _saveAnywhere = new SaveAnywhereFeature(_log);
             _saveAnywhere.RegisterSettings(context.Settings);
+
+            _inventoryStorage = new InventoryStorageTweak(_log);
+            _inventoryStorage.RegisterSettings(context.Settings);
 
             _playerMovement = new PlayerMovementTweak();
             _playerMovement.RegisterSettings(context.Settings);
@@ -63,6 +69,7 @@ namespace GK2Tweaks
 
         public override void OnEnable()
         {
+            _inventoryStorage?.Enable();
             _runtimeEnabled = true;
             _log.Info("GK2_TWEAKS_ENABLED");
         }
@@ -70,6 +77,7 @@ namespace GK2Tweaks
         public override void OnDisable()
         {
             _runtimeEnabled = false;
+            _inventoryStorage?.Disable();
             _log.Info("GK2_TWEAKS_DISABLED");
         }
 
@@ -79,6 +87,7 @@ namespace GK2Tweaks
 
         public override void OnReturnedToMainMenu()
         {
+            _inventoryStorage?.ResetSession();
             _playerMovement?.ResetSession();
         }
 
@@ -88,6 +97,7 @@ namespace GK2Tweaks
                 return;
 
             _saveAnywhere?.Tick();
+            _inventoryStorage?.Tick();
             _playerMovement?.Tick();
             _unstuck?.Tick();
         }
