@@ -43,7 +43,7 @@ namespace GK2Tweaks.Compatibility
                 typeof(Action<SaveSlotData, GameSave>));
         }
 
-        public static void VerifyEmergencyRecovery()
+        public static void VerifyUnstuck()
         {
             ReflectionContract.RequireProperty(
                 typeof(MainGame),
