@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using GK2.Framework;
+using GK2Tweaks.Compatibility;
+using GK2Tweaks.Features.SaveAnywhere;
 
 namespace GK2Tweaks
 {
@@ -13,7 +15,7 @@ namespace GK2Tweaks
                 Plugin.PluginVersion,
                 "Configurable quality-of-life tweaks for Graveyard Keeper 2.",
                 supportsRuntimeToggle: false,
-                requiresKnownBuild: false);
+                requiresKnownBuild: true);
 
         private readonly IReadOnlyList<Gk2ModDependency> _dependencies =
             new[]
@@ -25,6 +27,8 @@ namespace GK2Tweaks
             };
 
         private Gk2ModLogger _log;
+        private SaveAnywhereFeature _saveAnywhere;
+        private bool _runtimeEnabled;
 
         public override Gk2ModMetadata Metadata => _metadata;
 
@@ -35,16 +39,25 @@ namespace GK2Tweaks
         {
             _log = context.Log;
 
+            SaveAnywhereCompatibility.Validate();
+            context.ConfirmCurrentBuildCompatibility(
+                "Save Anywhere save/teleport API contract is intact.");
+
+            _saveAnywhere = new SaveAnywhereFeature(_log);
+            _saveAnywhere.RegisterSettings(context.Settings);
+
             _log.Info("GK2_TWEAKS_REGISTERED");
         }
 
         public override void OnEnable()
         {
+            _runtimeEnabled = true;
             _log.Info("GK2_TWEAKS_ENABLED");
         }
 
         public override void OnDisable()
         {
+            _runtimeEnabled = false;
             _log.Info("GK2_TWEAKS_DISABLED");
         }
 
@@ -54,6 +67,14 @@ namespace GK2Tweaks
 
         public override void OnReturnedToMainMenu()
         {
+        }
+
+        internal void Tick()
+        {
+            if (!_runtimeEnabled)
+                return;
+
+            _saveAnywhere?.Tick();
         }
     }
 }
