@@ -1,8 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <LocalPropsPath>$(MSBuildThisFileDirectory)..\..\build\Local.props</LocalPropsPath>
+    <HasLocalProps Condition="Exists('$(LocalPropsPath)')">true</HasLocalProps>
+    <HasLocalProps Condition="'$(HasLocalProps)' == ''">false</HasLocalProps>
+  </PropertyGroup>
+
   <Import
-      Project="..\..\build\Local.props"
-      Condition="Exists('..\..\build\Local.props')" />
+      Project="$(LocalPropsPath)"
+      Condition="'$(HasLocalProps)' == 'true'" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -17,6 +23,7 @@
     <BepInExDir Condition="'$(BepInExDir)' == ''">$(GameDir)\BepInEx</BepInExDir>
     <FrameworkDll Condition="'$(FrameworkDll)' == ''">$(BepInExDir)\plugins\GK2.Framework.dll</FrameworkDll>
 
+    <DeployToGame Condition="'$(DeployToGame)' == '' and '$(Configuration)' == 'Debug' and '$(HasLocalProps)' == 'true'">true</DeployToGame>
     <DeployToGame Condition="'$(DeployToGame)' == ''">false</DeployToGame>
     <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(BepInExDir)\plugins\GK2Tweaks</ModDeployDir>
   </PropertyGroup>
@@ -44,6 +51,8 @@
   </ItemGroup>
 
   <Target Name="ValidateLocalSdk" BeforeTargets="ResolveReferences">
+    <Message Importance="high"
+             Text="GK2Tweaks local build: Configuration=$(Configuration), GameDir=$(GameDir), DeployToGame=$(DeployToGame)" />
     <Error
         Condition="!Exists('$(BepInExDir)\core\BepInEx.dll')"
         Text="BepInEx.dll was not found. Copy build\Local.props.example to build\Local.props and set GameDir to your Graveyard Keeper 2 installation." />
@@ -55,10 +64,15 @@
         Text="UnityEngine.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
   </Target>
 
-  <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(DeployToGame)' == 'true'">
+  <Target Name="DeployBuiltMod"
+          AfterTargets="Build"
+          Condition="'$(DeployToGame)' == 'true'">
     <MakeDir Directories="$(ModDeployDir)" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDeployDir)" />
-    <Message Importance="high" Text="Deployed $(TargetFileName) to $(ModDeployDir)" />
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFiles="$(ModDeployDir)\$(TargetFileName)"
+          SkipUnchangedFiles="false" />
+    <Message Importance="high"
+             Text="GK2Tweaks deployed: $(TargetPath) -> $(ModDeployDir)\$(TargetFileName)" />
   </Target>
 
 </Project>
