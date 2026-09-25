@@ -11,10 +11,9 @@ namespace GK2Tweaks.Compatibility
         private const BindingFlags StaticMembers =
             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-        public static void RequireProperty(
+        public static PropertyInfo RequireProperty(
             Type owner,
             string name,
-            Type valueType,
             bool isStatic)
         {
             BindingFlags flags = isStatic ? StaticMembers : InstanceMembers;
@@ -22,9 +21,43 @@ namespace GK2Tweaks.Compatibility
             MethodInfo getter = property?.GetGetMethod(nonPublic: true);
 
             if (property == null
-                || property.PropertyType != valueType
                 || getter == null
                 || getter.IsStatic != isStatic)
+            {
+                throw new MissingMemberException(owner.FullName, name);
+            }
+
+            return property;
+        }
+
+        public static void RequireProperty(
+            Type owner,
+            string name,
+            Type valueType,
+            bool isStatic)
+        {
+            PropertyInfo property = RequireProperty(owner, name, isStatic);
+
+            if (property.PropertyType != valueType)
+            {
+                throw new MissingMemberException(
+                    owner.FullName,
+                    $"{name} : {valueType.FullName}");
+            }
+        }
+
+        public static void RequireWritableProperty(
+            Type owner,
+            string name,
+            Type valueType,
+            bool isStatic)
+        {
+            PropertyInfo property = RequireProperty(owner, name, isStatic);
+            MethodInfo setter = property.GetSetMethod(nonPublic: true);
+
+            if (property.PropertyType != valueType
+                || setter == null
+                || setter.IsStatic != isStatic)
             {
                 throw new MissingMemberException(
                     owner.FullName,
