@@ -1,5 +1,9 @@
-﻿<Project>
-    <PropertyGroup>
-        <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Graveyard Keeper 2</GameDir>
-    </PropertyGroup>
+<Project>
+  <PropertyGroup>
+    <!-- Copy this file to Local.props and edit the path for your machine. -->
+    <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Graveyard Keeper 2</GameDir>
+
+    <!-- Set to true for local development to copy GK2Tweaks.dll after each successful build. -->
+    <DeployToGame>false</DeployToGame>
+  </PropertyGroup>
 </Project>
