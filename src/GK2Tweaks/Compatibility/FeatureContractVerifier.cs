@@ -15,7 +15,7 @@ namespace GK2Tweaks.Compatibility
             ReflectionContract.RequireProperty(
                 typeof(MainGame),
                 "gameState",
-                typeof(GameState),
+                typeof(MainGame.GameState),
                 isStatic: false);
 
             ReflectionContract.RequireProperty(
