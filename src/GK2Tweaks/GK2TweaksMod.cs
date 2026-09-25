@@ -29,7 +29,7 @@ namespace GK2Tweaks
 
         private Gk2ModLogger _log;
         private SaveAnywhereFeature _saveAnywhere;
-        private EmergencyRecoveryFeature _emergencyRecovery;
+        private UnstuckFeature _unstuck;
         private bool _runtimeEnabled;
 
         public override Gk2ModMetadata Metadata => _metadata;
@@ -42,15 +42,15 @@ namespace GK2Tweaks
             _log = context.Log;
 
             FeatureContractVerifier.VerifySaveAnywhere();
-            FeatureContractVerifier.VerifyEmergencyRecovery();
+            FeatureContractVerifier.VerifyUnstuck();
             context.ConfirmCurrentBuildCompatibility(
-                "Manual save and emergency recovery contracts are intact.");
+                "Manual save and Unstuck contracts are intact.");
 
             _saveAnywhere = new SaveAnywhereFeature(_log);
             _saveAnywhere.RegisterSettings(context.Settings);
 
-            _emergencyRecovery = new EmergencyRecoveryFeature();
-            _emergencyRecovery.RegisterSettings(context.Settings);
+            _unstuck = new UnstuckFeature();
+            _unstuck.RegisterSettings(context.Settings);
 
             _log.Info("GK2_TWEAKS_REGISTERED");
         }
@@ -81,7 +81,7 @@ namespace GK2Tweaks
                 return;
 
             _saveAnywhere?.Tick();
-            _emergencyRecovery?.Tick();
+            _unstuck?.Tick();
         }
     }
 }
