@@ -1,4 +1,5 @@
 using System;
+using LazyBearTechnology;
 
 namespace GK2Tweaks.Compatibility
 {
@@ -60,6 +61,221 @@ namespace GK2Tweaks.Compatibility
                 physicalBody.PropertyType,
                 "SpeedMultiplier",
                 typeof(float),
+                isStatic: false);
+        }
+
+        public static void VerifyInventoryStorageTweak()
+        {
+            ReflectionContract.RequireProperty(
+                typeof(GameBalance),
+                "Me",
+                typeof(GameBalance),
+                isStatic: true);
+
+            ReflectionContract.RequireField(
+                typeof(GameBalance),
+                "itemDefs",
+                isStatic: false);
+
+            ReflectionContract.RequireField(
+                typeof(ItemDef),
+                "stackCount",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(GameBalance),
+                "LoadGameBalance");
+
+            ReflectionContract.RequireProperty(
+                typeof(MainGame),
+                "PlayerData",
+                typeof(PlayerData),
+                isStatic: true);
+
+            ReflectionContract.RequireProperty(
+                typeof(PlayerData),
+                "Inventory",
+                typeof(Inventory),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(Inventory),
+                "Data",
+                typeof(Item),
+                isStatic: false);
+
+            ReflectionContract.RequireWritableProperty(
+                typeof(Item),
+                "InventorySize",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(Item),
+                "InventoryFillSize",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(PlayerData),
+                "PrepareForGame");
+
+            ReflectionContract.RequireField(
+                typeof(GameSave),
+                "playerData",
+                typeof(PlayerData),
+                isStatic: false);
+
+            ReflectionContract.RequireField(
+                typeof(GameSave),
+                "perkSystemData",
+                typeof(PerkSystemData),
+                isStatic: false);
+
+            ReflectionContract.RequireMethod(
+                typeof(PerkSystemData),
+                "HasPerk",
+                typeof(bool),
+                isStatic: false,
+                typeof(string));
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(GameSave),
+                "PrepareToSave");
+
+            ReflectionContract.RequireProperty(
+                typeof(PlayerData),
+                "OverheadStackLimit",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(PlayerData),
+                "OverheadCount",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(PlayerData),
+                "HasOverheadItem",
+                typeof(bool),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(PlayerData),
+                "DropOverheadItem");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(PlayerData),
+                "AddOverheadItem");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(DropData),
+                "TryAddDropItemPartial");
+
+            ReflectionContract.RequireField(
+                typeof(DropView),
+                "mergeDelayTime",
+                typeof(float),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(DropView),
+                "MergeDelayCoroutine");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(DropView),
+                "ShouldAbsorbFrom");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(DropView),
+                "UpdateTextSprite");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(DropView),
+                "OnDestroy");
+
+            ReflectionContract.RequireField(
+                typeof(BigDropInteractionHandler),
+                "drop",
+                typeof(DropView),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(BigDropInteractionHandler),
+                "Interact");
+
+            ReflectionContract.RequireField(
+                typeof(WGODef),
+                "inventorySize",
+                typeof(int),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(WgoData),
+                "Inventory",
+                typeof(Inventory),
+                isStatic: false);
+
+            ReflectionContract.RequireProperty(
+                typeof(Wgo),
+                "Data",
+                typeof(WgoData),
+                isStatic: false);
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(WgoData),
+                "SetDataFromDefinition");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(WgoData),
+                "PrepareForGame");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(WgoData),
+                "MakeDrop");
+
+            ReflectionContract.RequireEvent(
+                typeof(Inventory),
+                "OnItemsAdd");
+
+            ReflectionContract.RequireEvent(
+                typeof(Inventory),
+                "OnItemsRemove");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(Wgo),
+                "GetWidgetData");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(Wgo),
+                "InitDataBindings");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(Wgo),
+                "DeInit");
+
+            ReflectionContract.RequireMethodNamed(
+                typeof(Wgo),
+                "DrawWidgets");
+
+            ReflectionContract.RequireField(
+                typeof(UITooltip),
+                "instance",
+                typeof(UITooltip),
+                isStatic: true);
+
+            ReflectionContract.RequireField(
+                typeof(UITooltip),
+                "headerTextStyle",
+                typeof(TextStyle),
+                isStatic: false);
+
+            ReflectionContract.RequireField(
+                typeof(UITooltip),
+                "headerBoldTextStyleGold",
+                typeof(TextStyle),
                 isStatic: false);
         }
 
