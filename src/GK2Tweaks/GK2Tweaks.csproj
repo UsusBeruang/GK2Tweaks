@@ -56,6 +56,11 @@
       <HintPath>$(GameDataDir)\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GameDataDir)\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <Target Name="ValidateLocalSdk" BeforeTargets="ResolveReferences">
@@ -73,6 +78,9 @@
     <Error
         Condition="!Exists('$(GameDataDir)\Managed\UnityEngine.dll')"
         Text="UnityEngine.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
+    <Error
+        Condition="!Exists('$(GameDataDir)\Managed\UnityEngine.InputLegacyModule.dll')"
+        Text="UnityEngine.InputLegacyModule.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
     <Error
         Condition="'$(DeployToGame)' == 'true' and '$(RunGameAfterDeploy)' == 'true' and !Exists('$(GameExecutable)')"
         Text="Game executable was not found at '$(GameExecutable)'. Check GameDir or override GameExecutable in build\Local.props." />

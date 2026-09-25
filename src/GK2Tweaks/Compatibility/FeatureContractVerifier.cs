@@ -43,6 +43,26 @@ namespace GK2Tweaks.Compatibility
                 typeof(Action<SaveSlotData, GameSave>));
         }
 
+        public static void VerifyPlayerMovementTweak()
+        {
+            ReflectionContract.RequireProperty(
+                typeof(MainGame),
+                "PlayerController",
+                typeof(PlayerController),
+                isStatic: true);
+
+            var physicalBody = ReflectionContract.RequireProperty(
+                typeof(PlayerController),
+                "PhysicalBody",
+                isStatic: false);
+
+            ReflectionContract.RequireWritableProperty(
+                physicalBody.PropertyType,
+                "SpeedMultiplier",
+                typeof(float),
+                isStatic: false);
+        }
+
         public static void VerifyUnstuck()
         {
             ReflectionContract.RequireProperty(
