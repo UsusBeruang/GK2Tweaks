@@ -43,7 +43,7 @@ Release build:
 dotnet build .\GK2Tweaks.sln -c Release
 ```
 
-The project validates the local BepInEx, GK2 Mod Framework, and Unity reference paths before compiling.
+The project validates the local BepInEx, GK2 Mod Framework, and Unity reference paths before compiling. During Debug builds it also prints the resolved `GameDir` and deployment state so Rider build output shows exactly where the mod is going.
 
 ## Development workflow
 
