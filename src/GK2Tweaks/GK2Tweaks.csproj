@@ -42,8 +42,23 @@
       <Private>false</Private>
     </Reference>
 
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExDir)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
     <Reference Include="Assembly-CSharp">
       <HintPath>$(GameDataDir)\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="LazyBearTechnology">
+      <HintPath>$(GameDataDir)\Managed\LazyBearTechnology.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(GameDataDir)\Managed\Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
     </Reference>
 
@@ -73,8 +88,17 @@
         Condition="!Exists('$(FrameworkDll)')"
         Text="GK2.Framework.dll was not found at '$(FrameworkDll)'. Install GK2 Mod Framework or override FrameworkDll in build\Local.props." />
     <Error
+        Condition="!Exists('$(BepInExDir)\core\0Harmony.dll')"
+        Text="0Harmony.dll was not found under '$(BepInExDir)\core'. Check the BepInEx 5 installation." />
+    <Error
         Condition="!Exists('$(GameDataDir)\Managed\Assembly-CSharp.dll')"
         Text="Assembly-CSharp.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
+    <Error
+        Condition="!Exists('$(GameDataDir)\Managed\LazyBearTechnology.dll')"
+        Text="LazyBearTechnology.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
+    <Error
+        Condition="!Exists('$(GameDataDir)\Managed\Unity.TextMeshPro.dll')"
+        Text="Unity.TextMeshPro.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
     <Error
         Condition="!Exists('$(GameDataDir)\Managed\UnityEngine.dll')"
         Text="UnityEngine.dll was not found under '$(GameDataDir)\Managed'. Check GameDir in build\Local.props." />
